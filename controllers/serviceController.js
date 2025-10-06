@@ -171,3 +171,29 @@ exports.deleteService = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+// Buscar serviços filtrados
+exports.getFilteredServices = async (req, res) => {
+  try {
+    const { tipo, dataInicio, dataFim } = req.query;
+    const filtro = {};
+
+    // Filtro por tipo
+    if (tipo) filtro.tipo = tipo;
+
+    // Filtro por período
+    if (dataInicio && dataFim) {
+      filtro.data = {
+        $gte: new Date(dataInicio),
+        $lte: new Date(dataFim),
+      };
+    }
+
+    const servicos = await Service.find(filtro).sort({ data: -1 });
+
+    res.json({ success: true, data: servicos });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
