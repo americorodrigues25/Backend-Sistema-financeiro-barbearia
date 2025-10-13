@@ -9,7 +9,6 @@ router.get("/total/month", serviceController.getTotalMonth);
 router.get("/week", serviceController.getWeek);
 router.get("/last", serviceController.getLast);
 router.get("/filter", getFilteredServices);
-
 router.put("/:id", serviceController.updateService);
 router.delete("/:id", serviceController.deleteService);
 

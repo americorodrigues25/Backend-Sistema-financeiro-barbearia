@@ -1,6 +1,6 @@
 const Service = require("../models/Service");
 
-// Criar serviço
+// cria serviço
 exports.createService = async (req, res) => {
   try {
     const { tipo, valor, data } = req.body;
@@ -17,7 +17,7 @@ exports.createService = async (req, res) => {
   }
 };
 
-// Total do dia
+// valor total do dia
 exports.getTotalDay = async (req, res) => {
   try {
     const hoje = new Date();
@@ -49,7 +49,7 @@ exports.getTotalDay = async (req, res) => {
   }
 };
 
-// Total do mês
+// valor total do mês
 exports.getTotalMonth = async (req, res) => {
   try {
     const hoje = new Date();
@@ -74,7 +74,7 @@ exports.getTotalMonth = async (req, res) => {
   }
 };
 
-// Dados da semana
+// dados da semana
 exports.getWeek = async (req, res) => {
   try {
     const hoje = new Date();
@@ -113,7 +113,7 @@ exports.getWeek = async (req, res) => {
   }
 };
 
-// Últimos serviços
+// ultimos serviços cadastrados
 exports.getLast = async (req, res) => {
   try {
     const ultimos = await Service.find()
@@ -125,17 +125,15 @@ exports.getLast = async (req, res) => {
   }
 };
 
-// Atualizar
+// atualiza serviço
 exports.updateService = async (req, res) => {
   try {
     let { tipo, valor, data } = req.body;
 
-    // garante que valor é number
     valor = Number(valor);
 
-    // garante que data é Date e ajusta fuso horário
     data = new Date(data);
-    data.setHours(data.getHours() + 3); // ajuste se estiver no fuso BRT (-3)
+    data.setHours(data.getHours() + 3); 
 
     const service = await Service.findByIdAndUpdate(
       req.params.id,
@@ -155,7 +153,7 @@ exports.updateService = async (req, res) => {
   }
 };
 
-// Deletar
+// apagar serviço
 exports.deleteService = async (req, res) => {
   try {
     const service = await Service.findByIdAndDelete(req.params.id);
@@ -178,10 +176,8 @@ exports.getFilteredServices = async (req, res) => {
     const { tipo, dataInicio, dataFim } = req.query;
     const filtro = {};
 
-    // Filtro por tipo
     if (tipo) filtro.tipo = tipo;
 
-    // Filtro por período
     if (dataInicio && dataFim) {
       filtro.data = {
         $gte: new Date(dataInicio),
@@ -196,4 +192,3 @@ exports.getFilteredServices = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
-
