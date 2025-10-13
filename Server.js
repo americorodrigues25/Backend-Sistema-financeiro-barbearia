@@ -18,10 +18,25 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.CLIENT_URL, // Sua URL do Vercel
+];
+
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:3000", 
+    origin: (origin, callback) => {
+      // Permite requisições sem "origin" (como apps nativos ou Postman)
+      if (!origin) return callback(null, true);
+
+      // Verifica se a origem está na lista de permitidas
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `A política CORS para o site ${origin} não permite acesso.`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
