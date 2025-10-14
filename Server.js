@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const connectDB = require("./config/database")
 
 const requiredEnv = ["PORT", "MONGO_URI", "JWT_SECRET"];
 requiredEnv.forEach((env) => {
@@ -47,12 +48,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/services", Service);
 
 // Conexão com banco
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB conectado"))
-  .catch((err) => console.log(err));
+connectDB();
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
