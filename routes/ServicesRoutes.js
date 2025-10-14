@@ -12,4 +12,9 @@ router.get("/filter", getFilteredServices);
 router.put("/:id", serviceController.updateService);
 router.delete("/:id", serviceController.deleteService);
 
+// Rota leve para manter o servidor acordado
+router.get("/ping", (req, res) => {
+  res.status(200).json({ message: "Servidor ativo" });
+});
+
 module.exports = router;
