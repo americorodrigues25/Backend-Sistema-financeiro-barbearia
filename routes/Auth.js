@@ -3,9 +3,16 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {changePassword} = require("../controllers/userController");
+const { changePassword } = require("../controllers/userController");
 
-// Login
+const auth = require("../middleware/auth");
+const { getUserProfile, updateUserName } = require("../controllers/userController");
+
+// perfil do usuario
+router.get("/profile", auth, getUserProfile);
+router.put("/update-name", auth, updateUserName);
+
+// login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -16,9 +23,11 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Senha incorreta" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
     res.json({ token, username: user.username });
   } catch (err) {
     res.status(500).json({ msg: "Erro no servidor" });
