@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.json({ token, username: user.username });
+    res.json({ token, username: user.username, name: user.name });
   } catch (err) {
     res.status(500).json({ msg: "Erro no servidor" });
   }
