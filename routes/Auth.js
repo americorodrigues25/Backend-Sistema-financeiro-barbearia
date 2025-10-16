@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const {changePassword} = require("../controllers/userController");
 
 // Login
 router.post("/login", async (req, res) => {
@@ -23,5 +24,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ msg: "Erro no servidor" });
   }
 });
+
+router.put("/change-password", changePassword);
 
 module.exports = router;
