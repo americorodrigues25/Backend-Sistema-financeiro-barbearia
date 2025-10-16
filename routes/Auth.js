@@ -18,21 +18,24 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ msg: "Usuário não encontrado" });
+    const isMatch = user ? await bcrypt.compare(password, user.password) : false;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Senha incorreta" });
+    if (!user || !isMatch) {
+      return res.status(400).json({ msg: "Usuário ou senha incorretos" });
+    }
 
     const token = jwt.sign(
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
+
     res.json({ token, username: user.username });
   } catch (err) {
     res.status(500).json({ msg: "Erro no servidor" });
   }
 });
+
 
 router.put("/change-password", changePassword);
 
