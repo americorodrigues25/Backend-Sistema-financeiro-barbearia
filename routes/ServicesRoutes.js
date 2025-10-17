@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const serviceController = require("../controllers/serviceController");
 const { getFilteredServices } = require("../controllers/serviceController");
+const auth = require("../middleware/auth");
 
+
+router.use(auth);
 router.post("/", serviceController.createService);
 router.get("/total/day", serviceController.getTotalDay);
 router.get("/total/month", serviceController.getTotalMonth);

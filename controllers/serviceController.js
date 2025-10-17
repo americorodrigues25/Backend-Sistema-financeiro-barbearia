@@ -4,7 +4,7 @@ const Service = require("../models/Service");
 exports.createService = async (req, res) => {
   try {
     const { tipo, valor, data } = req.body;
-    const service = new Service({ tipo, valor, data });
+    const service = new Service({ tipo, valor, data, user: req.user.id });
     await service.save();
 
     res.status(201).json({
@@ -39,6 +39,7 @@ exports.getTotalDay = async (req, res) => {
     );
 
     const servicosHoje = await Service.find({
+      user: req.user.id,
       data: { $gte: inicioDia, $lte: fimDia },
     });
     const total = servicosHoje.reduce((acc, s) => acc + s.valor, 0);
@@ -64,6 +65,7 @@ exports.getTotalMonth = async (req, res) => {
     );
 
     const servicosMes = await Service.find({
+      user: req.user.id,
       data: { $gte: inicioMes, $lte: fimMes },
     });
     const total = servicosMes.reduce((acc, s) => acc + s.valor, 0);
@@ -96,6 +98,7 @@ exports.getWeek = async (req, res) => {
       fim.setHours(23, 59, 59, 999);
 
       const servicosDia = await Service.find({
+        user: req.user.id,
         data: { $gte: inicio, $lte: fim },
       });
       const totalDia = servicosDia.reduce((acc, s) => acc + s.valor, 0);
@@ -116,7 +119,7 @@ exports.getWeek = async (req, res) => {
 // ultimos serviços cadastrados
 exports.getLast = async (req, res) => {
   try {
-    const ultimos = await Service.find()
+    const ultimos = await Service.find({ user: req.user.id })
       .sort({ updatedAt: -1 })
       .limit(3);
     res.json({ success: true, ultimos });
@@ -133,10 +136,10 @@ exports.updateService = async (req, res) => {
     valor = Number(valor);
 
     data = new Date(data);
-    data.setHours(data.getHours() + 3); 
+    data.setHours(data.getHours() + 3);
 
     const service = await Service.findByIdAndUpdate(
-      req.params.id,
+      { _id: req.params.id, user: req.user.id },
       { tipo, valor, data },
       { new: true }
     );
@@ -156,7 +159,10 @@ exports.updateService = async (req, res) => {
 // apagar serviço
 exports.deleteService = async (req, res) => {
   try {
-    const service = await Service.findByIdAndDelete(req.params.id);
+    const service = await Service.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user.id,
+    });
 
     if (!service) {
       return res
@@ -170,11 +176,11 @@ exports.deleteService = async (req, res) => {
   }
 };
 
-// busca serviços 
+// busca serviços
 exports.getFilteredServices = async (req, res) => {
   try {
     const { tipo, dataInicio, dataFim } = req.query;
-    const filtro = {};
+    const filtro = { user: req.user.id };
 
     if (tipo) filtro.tipo = tipo;
 
