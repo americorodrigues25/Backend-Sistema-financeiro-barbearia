@@ -5,13 +5,13 @@ const ServiceSchema = new mongoose.Schema(
     tipo: {
       type: String,
       required: [true, "O tipo de serviço é obrigatório."],
-      trim: true, // tira os espaços em branco
+      trim: true, 
     },
 
     valor: {
       type: Number,
       required: [true, "O valor do serviço é obrigatório."],
-      min: [0, "O valor não pode ser negativo."], // valor mínimo 0
+      min: [0, "O valor não pode ser negativo."], 
     },
 
     data: {

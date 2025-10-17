@@ -8,18 +8,18 @@ async function connectDB() {
       serverSelectionTimeoutMS: 5000, 
     });
 
-    console.log("✅ MongoDB conectado com sucesso!");
+    console.log("MongoDB conectado com sucesso!");
   } catch (err) {
-    console.error("❌ Erro ao conectar ao MongoDB:", err.message);
+    console.error("Erro ao conectar ao MongoDB:", err.message);
     process.exit(1); 
   }
 
   mongoose.connection.on("disconnected", () => {
-    console.warn("Conexão com o MongoDB perdida. Tentando reconectar...");
+    console.warn("Conexão perdida.");
   });
 
   mongoose.connection.on("reconnected", () => {
-    console.log("Reconectado ao MongoDB!");
+    console.log("Reconectado");
   });
 }
 

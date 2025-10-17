@@ -117,7 +117,7 @@ exports.getWeek = async (req, res) => {
 exports.getLast = async (req, res) => {
   try {
     const ultimos = await Service.find()
-      .sort({ updatedAt: -1 }) // serviços mais recentes ou atualizados primeiro
+      .sort({ updatedAt: -1 })
       .limit(3);
     res.json({ success: true, ultimos });
   } catch (err) {
@@ -170,7 +170,7 @@ exports.deleteService = async (req, res) => {
   }
 };
 
-// Buscar serviços filtrados
+// busca serviços 
 exports.getFilteredServices = async (req, res) => {
   try {
     const { tipo, dataInicio, dataFim } = req.query;

@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 // trazer dados do usuario
 exports.getUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // vamos precisar de middleware de auth
+    const userId = req.user.id; 
     const user = await User.findById(userId).select("username name email");
 
     if (!user) {
@@ -64,6 +64,16 @@ exports.changePassword = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "E-mail e nova senha são obrigatórios.",
+      });
+    }
+
+     const passwordRegex = /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/;
+
+     if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "A senha deve ter pelo menos 6 caracteres e conter pelo menos 1 caractere especial (ex: @, #, $, !, etc).",
       });
     }
 

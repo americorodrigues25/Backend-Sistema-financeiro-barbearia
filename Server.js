@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+
+// config do banco
 const connectDB = require("./config/database");
 
 // Rotas
@@ -13,16 +15,16 @@ const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 const MONGO_URI = process.env.MONGO_URI || "";
 
-// Conexão segura com o banco de dados
+// Conexão com banco 
 if (!MONGO_URI) {
-  console.warn("⚠️  MONGO_URI não definida! O banco não será conectado.");
+  console.warn("MONGO_URI não definida! O banco não será conectado.");
 } else {
   connectDB();
 }
 
 const app = express();
 
-// Middlewares
+// middlewares
 const allowedOrigins = ["http://localhost:3000", CLIENT_URL];
 
 app.use(
@@ -41,19 +43,19 @@ app.use(
 
 app.use(express.json());
 
-// Rotas
+// rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/services", serviceRoutes);
 
-// Rota leve para ping (manter servidor ativo)
+// rota que mantem servidor sempre ativo
 app.get("/ping", (req, res) => {
   res.status(200).json({ message: "Servidor ativo" });
 });
 
-// Rota raiz simples
+// raiz
 app.get("/", (req, res) => {
   res.send("API funcionando!");
 });
 
-// Inicia o servidor
+// inicializa o servidor
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
