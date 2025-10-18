@@ -5,15 +5,13 @@ exports.createService = async (req, res) => {
   try {
     const { tipo, valor, data } = req.body;
 
-    // se não enviar, usa data atual
-    const serviceDate = data
-      ? new Date(data).toISOString()
-      : new Date().toISOString();
+    // Se não enviar data, usa o horário atual
+    const serviceDate = data ? new Date(data) : new Date();
 
     const service = new Service({
       tipo,
       valor,
-      data: serviceDate,
+      data: serviceDate, 
       user: req.user.id,
     });
 
@@ -32,28 +30,18 @@ exports.createService = async (req, res) => {
 // valor total do dia
 exports.getTotalDay = async (req, res) => {
   try {
-    const hoje = new Date();
-    const inicioDia = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth(),
-      hoje.getDate()
-    );
-    const fimDia = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth(),
-      hoje.getDate(),
-      23,
-      59,
-      59,
-      999
-    );
+    const agora = new Date();
+
+    // início e fim do dia em hora local
+    const inicioDia = new Date(agora);
+    inicioDia.setHours(0, 0, 0, 0);
+
+    const fimDia = new Date(agora);
+    fimDia.setHours(23, 59, 59, 999);
 
     const servicosHoje = await Service.find({
       user: req.user.id,
-      data: {
-        $gte: inicioDia.toISOString(),
-        $lte: fimDia.toISOString(),
-      },
+      data: { $gte: inicioDia, $lte: fimDia },
     });
 
     const total = servicosHoje.reduce((acc, s) => acc + s.valor, 0);
@@ -81,10 +69,7 @@ exports.getTotalMonth = async (req, res) => {
 
     const servicosMes = await Service.find({
       user: req.user.id,
-      data: {
-        $gte: inicioMes.toISOString(),
-        $lte: fimMes.toISOString(),
-      },
+      data: { $gte: inicioMes, $lte: fimMes },
     });
 
     const total = servicosMes.reduce((acc, s) => acc + s.valor, 0);
