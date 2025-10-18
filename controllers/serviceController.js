@@ -11,7 +11,7 @@ exports.createService = async (req, res) => {
     const service = new Service({
       tipo,
       valor,
-      data: serviceDate, 
+      data: serviceDate,
       user: req.user.id,
     });
 
@@ -139,11 +139,13 @@ exports.updateService = async (req, res) => {
   try {
     const { tipo, valor, data } = req.body;
 
-    const serviceDate = data ? new Date(data) : new Date();
-
     const service = await Service.findByIdAndUpdate(
       { _id: req.params.id, user: req.user.id },
-      { tipo, valor, data: serviceDate },
+      {
+        tipo,
+        valor,
+        data: data ? new Date(data) : new Date(), // converte string ISO para Date
+      },
       { new: true }
     );
 
