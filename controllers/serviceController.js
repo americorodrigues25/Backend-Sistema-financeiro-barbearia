@@ -3,8 +3,19 @@ const Service = require("../models/Service");
 // cria serviço
 exports.createService = async (req, res) => {
   try {
-    const { tipo, valor, data } = req.body;
-    const service = new Service({ tipo, valor, data, user: req.user.id });
+    const { tipo, valor } = req.body;
+    let { data } = req.body;
+
+    const original = data ? new Date(data) : new Date();
+    const offset = original.getTimezoneOffset() * 60000;
+    const local = new Date(original.getTime() - offset);
+
+    const service = new Service({
+      tipo,
+      valor,
+      data: local, 
+      user: req.user.id,
+    });
     await service.save();
 
     res.status(201).json({
@@ -20,18 +31,19 @@ exports.createService = async (req, res) => {
 // valor total do dia
 exports.getTotalDay = async (req, res) => {
   try {
-    const hoje = new Date();
+    const agora = new Date();
+    const offset = agora.getTimezoneOffset() * 60000;
+    const local = new Date(agora.getTime() - offset);
 
     const inicioDia = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth(),
-      hoje.getDate()
+      local.getFullYear(),
+      local.getMonth(),
+      local.getDate()
     );
-
     const proximoDia = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth(),
-      hoje.getDate() + 1
+      local.getFullYear(),
+      local.getMonth(),
+      local.getDate() + 1
     );
 
     const servicosHoje = await Service.find({
@@ -129,15 +141,15 @@ exports.getLast = async (req, res) => {
 exports.updateService = async (req, res) => {
   try {
     let { tipo, valor, data } = req.body;
-
     valor = Number(valor);
 
-    data = new Date(data);
-    data.setHours(data.getHours() + 3);
+    const original = new Date(data);
+    const offset = original.getTimezoneOffset() * 60000;
+    const local = new Date(original.getTime() - offset);
 
-    const service = await Service.findByIdAndUpdate(
+    const service = await Service.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },
-      { tipo, valor, data },
+      { tipo, valor, data: local },
       { new: true }
     );
 
