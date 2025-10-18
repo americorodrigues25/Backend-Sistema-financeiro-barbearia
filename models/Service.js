@@ -19,14 +19,16 @@ const ServiceSchema = new mongoose.Schema(
       required: [true, "A data é obrigatória."],
       default: Date.now,
     },
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true, 
+      required: true,
     },
   },
   {
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model("Service", ServiceSchema);

@@ -3,19 +3,16 @@ const Service = require("../models/Service");
 // cria serviço
 exports.createService = async (req, res) => {
   try {
-    const { tipo, valor } = req.body;
-    let { data } = req.body;
-
-    const original = data ? new Date(data) : new Date();
-    const offset = original.getTimezoneOffset() * 60000;
-    const local = new Date(original.getTime() - offset);
+    const { tipo, valor, data } = req.body;
+    const serviceDate = data ? new Date(data) : new Date();
 
     const service = new Service({
       tipo,
       valor,
-      data: local, 
+      data: serviceDate,
       user: req.user.id,
     });
+
     await service.save();
 
     res.status(201).json({
@@ -31,24 +28,13 @@ exports.createService = async (req, res) => {
 // valor total do dia
 exports.getTotalDay = async (req, res) => {
   try {
-    const agora = new Date();
-    const offset = agora.getTimezoneOffset() * 60000;
-    const local = new Date(agora.getTime() - offset);
-
-    const inicioDia = new Date(
-      local.getFullYear(),
-      local.getMonth(),
-      local.getDate()
-    );
-    const proximoDia = new Date(
-      local.getFullYear(),
-      local.getMonth(),
-      local.getDate() + 1
-    );
+    const hoje = new Date();
+    const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    const fimDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate(), 23, 59, 59, 999);
 
     const servicosHoje = await Service.find({
       user: req.user.id,
-      data: { $gte: inicioDia, $lt: proximoDia },
+      data: { $gte: inicioDia, $lte: fimDia },
     });
 
     const total = servicosHoje.reduce((acc, s) => acc + s.valor, 0);
@@ -64,19 +50,13 @@ exports.getTotalMonth = async (req, res) => {
   try {
     const hoje = new Date();
     const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    const fimMes = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth() + 1,
-      0,
-      23,
-      59,
-      59
-    );
+    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59, 999);
 
     const servicosMes = await Service.find({
       user: req.user.id,
       data: { $gte: inicioMes, $lte: fimMes },
     });
+
     const total = servicosMes.reduce((acc, s) => acc + s.valor, 0);
 
     res.json({ success: true, total, quantidade: servicosMes.length });
@@ -89,7 +69,7 @@ exports.getTotalMonth = async (req, res) => {
 exports.getWeek = async (req, res) => {
   try {
     const hoje = new Date();
-    const diaSemana = hoje.getDay();
+    const diaSemana = hoje.getDay(); // 0 = Domingo
 
     const domingo = new Date(hoje);
     domingo.setDate(hoje.getDate() - diaSemana);
@@ -110,6 +90,7 @@ exports.getWeek = async (req, res) => {
         user: req.user.id,
         data: { $gte: inicio, $lte: fim },
       });
+
       const totalDia = servicosDia.reduce((acc, s) => acc + s.valor, 0);
 
       dadosSemana.push({
@@ -131,6 +112,7 @@ exports.getLast = async (req, res) => {
     const ultimos = await Service.find({ user: req.user.id })
       .sort({ updatedAt: -1 })
       .limit(3);
+
     res.json({ success: true, ultimos });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -140,23 +122,18 @@ exports.getLast = async (req, res) => {
 // atualiza serviço
 exports.updateService = async (req, res) => {
   try {
-    let { tipo, valor, data } = req.body;
-    valor = Number(valor);
+    const { tipo, valor, data } = req.body;
 
-    const original = new Date(data);
-    const offset = original.getTimezoneOffset() * 60000;
-    const local = new Date(original.getTime() - offset);
+    const serviceDate = data ? new Date(data) : new Date();
 
-    const service = await Service.findOneAndUpdate(
+    const service = await Service.findByIdAndUpdate(
       { _id: req.params.id, user: req.user.id },
-      { tipo, valor, data: local },
+      { tipo, valor, data: serviceDate },
       { new: true }
     );
 
     if (!service) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Serviço não encontrado" });
+      return res.status(404).json({ success: false, message: "Serviço não encontrado" });
     }
 
     res.json({ success: true, message: "Serviço atualizado!", data: service });
@@ -174,9 +151,7 @@ exports.deleteService = async (req, res) => {
     });
 
     if (!service) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Serviço não encontrado" });
+      return res.status(404).json({ success: false, message: "Serviço não encontrado" });
     }
 
     res.json({ success: true, message: "Serviço excluído!" });
@@ -185,7 +160,7 @@ exports.deleteService = async (req, res) => {
   }
 };
 
-// busca serviços
+// busca serviços filtrados
 exports.getFilteredServices = async (req, res) => {
   try {
     const { tipo, dataInicio, dataFim } = req.query;
