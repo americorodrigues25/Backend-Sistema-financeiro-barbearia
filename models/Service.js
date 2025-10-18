@@ -7,19 +7,16 @@ const ServiceSchema = new mongoose.Schema(
       required: [true, "O tipo de serviço é obrigatório."],
       trim: true,
     },
-
     valor: {
       type: Number,
       required: [true, "O valor do serviço é obrigatório."],
       min: [0, "O valor não pode ser negativo."],
     },
-
     data: {
-      type: Date,
+      type: String, // salvamos como string ISO
       required: [true, "A data é obrigatória."],
-      default: Date.now,
+      default: () => new Date().toISOString(), // salva data atual se não enviar
     },
-
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
