@@ -21,27 +21,24 @@ exports.createService = async (req, res) => {
 exports.getTotalDay = async (req, res) => {
   try {
     const hoje = new Date();
+
     const inicioDia = new Date(
       hoje.getFullYear(),
       hoje.getMonth(),
-      hoje.getDate(),
-      0,
-      0,
-      0
+      hoje.getDate()
     );
-    const fimDia = new Date(
+
+    const proximoDia = new Date(
       hoje.getFullYear(),
       hoje.getMonth(),
-      hoje.getDate(),
-      23,
-      59,
-      59
+      hoje.getDate() + 1
     );
 
     const servicosHoje = await Service.find({
       user: req.user.id,
-      data: { $gte: inicioDia, $lte: fimDia },
+      data: { $gte: inicioDia, $lt: proximoDia },
     });
+
     const total = servicosHoje.reduce((acc, s) => acc + s.valor, 0);
 
     res.json({ success: true, total });
