@@ -3,10 +3,12 @@ const router = express.Router();
 
 const { changePassword } = require("../controllers/userController");
 const auth = require("../middleware/auth");
+
 const {
   getUserProfile,
   updateUserName,
 } = require("../controllers/userController");
+
 const { login } = require("../controllers/authController");
 
 // perfil do usuario

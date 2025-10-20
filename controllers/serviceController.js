@@ -5,7 +5,7 @@ exports.createService = async (req, res) => {
   try {
     const { tipo, valor, data } = req.body;
 
-    // Se não enviar data, usa o horário atual
+    // converte data se fornecida senão usa data atual
     const serviceDate = data ? new Date(data) : new Date();
 
     const service = new Service({
@@ -84,7 +84,7 @@ exports.getTotalMonth = async (req, res) => {
 exports.getWeek = async (req, res) => {
   try {
     const hoje = new Date();
-    const diaSemana = hoje.getDay(); // 0 = Domingo
+    const diaSemana = hoje.getDay();
 
     const domingo = new Date(hoje);
     domingo.setDate(hoje.getDate() - diaSemana);
@@ -144,7 +144,7 @@ exports.updateService = async (req, res) => {
       {
         tipo,
         valor,
-        data: data ? new Date(data) : new Date(), // converte string ISO para Date
+        data: data ? new Date(data) : new Date(), 
       },
       { new: true }
     );
