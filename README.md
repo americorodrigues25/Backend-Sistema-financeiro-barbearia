@@ -3,8 +3,6 @@
 ### 📘 Sobre o sistema 
 <p>Este repositório contém todo o backend do sistema que realizei para barbearia do meu cliente. Desenvolvido para facilitar o <b>controle financeiro diário e mensal dos serviços realizados.</b></p>
 
----
-
 🔗 Veja também: <a href="https://github.com/americorodrigues25/Frontend-Sistema-financeiro-barbearia">Repositório do Front-end</a>
 
 ---
