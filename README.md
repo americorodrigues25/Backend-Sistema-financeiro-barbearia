@@ -3,6 +3,12 @@
 ### 📘 Sobre o sistema 
 <p>Este repositório contém todo o backend do sistema que realizei para barbearia do meu cliente. Desenvolvido para facilitar o <b>controle financeiro diário e mensal dos serviços realizados.</b></p>
 
+---
+
+🔗 Veja também: <a href="https://github.com/americorodrigues25/Backend-Sistema-financeiro-barbearia">Repositório do Back-end</a>
+
+---
+
 O sistema permite:
 - Cadastrar serviços realizados.
 - Vizualizar valores diarios e mensais.
@@ -11,6 +17,8 @@ O sistema permite:
 - Exportar relatório por periodo e tipo de serviço.
 
 <p>O back-end foi desenvolvido com <b>Node.js</b> (Express) e <b>MongoDB</b>, utilizando <b>Mongoose</b> para modelagem dos dados e <b>JWT</b> para autenticação segura.</p>
+
+---
 
 ### 🛠️ Tecnologias utilizadas
 - [NodeJS](https://nodejs.org/pt)
@@ -22,6 +30,8 @@ O sistema permite:
 - [Dotenv](https://www.npmjs.com/package/dotenv)
 - [Cors](https://www.npmjs.com/package/cors)
 
+---
+
 ### ⚙️ Funcionalidades principais
 * Autenticação de usuários (login);
 * CRUD de serviços (criação, leitura, atualização e exclusão);
@@ -29,6 +39,8 @@ O sistema permite:
 * Cálculo automático dos totais diários e mensais;
 * Proteção de rotas com tokens JWT.
 * Exportar relatório em PDF
+
+---
 
 ### 🚀 Rodando  projeto
 
