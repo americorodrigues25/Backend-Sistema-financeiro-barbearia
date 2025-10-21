@@ -5,7 +5,7 @@
 
 ---
 
-🔗 Veja também: <a href="https://github.com/americorodrigues25/Backend-Sistema-financeiro-barbearia">Repositório do Back-end</a>
+🔗 Veja também: <a href="https://github.com/americorodrigues25/Frontend-Sistema-financeiro-barbearia">Repositório do Front-end</a>
 
 ---
 
