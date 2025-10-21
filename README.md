@@ -62,6 +62,13 @@ $ CLIENT_URL=https://localhost:3000
 $ npm run dev
 ```
 
+OBS. O projeto inclui um script auxiliar para criar um usuário inicial no banco de dados.
+
+``` bash
+# Rode no terminal
+$ node nome_do_arquivo
+```
+
 ---
 
 ### 🧾 Licença
