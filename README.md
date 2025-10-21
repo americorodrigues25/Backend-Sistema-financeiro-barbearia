@@ -20,6 +20,12 @@ O sistema permite:
 
 ---
 
+### 🌐 [**Clique aqui para testar o sistema**](https://sistema-barbearia-cabeca.vercel.app/)
+* Usuário: usuarioteste
+* Senha: 123456
+
+---
+
 ### 🛠️ Tecnologias utilizadas
 - [NodeJS](https://nodejs.org/pt)
 - [ExpressJS](https://expressjs.com/)
@@ -89,6 +95,11 @@ Este projeto está licenciado sob a **MIT License**.
 Você pode **usar, modificar e adaptar este sistema** livremente para outros clientes ou barbearias, desde que **mantenha os devidos créditos ao autor original**.  
 
 Para mais detalhes, consulte o arquivo [LICENSE](./LICENSE).
+
+---
+
+### 📢 Publicação no LinkedIn
+[🔗 Ver post no LinkedIn]()
 
 ---
 
