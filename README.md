@@ -14,7 +14,7 @@ O sistema permite:
 - Graficos dinâmicos com valores e serviços.
 - Exportar relatório por periodo e tipo de serviço.
 
-<p>O back-end foi desenvolvido com <b>Node.js</b> (Express) e <b>MongoDB</b>, utilizando <b>Mongoose</b> para modelagem dos dados e <b>JWT</b> para autenticação segura.</p>
+<p>O back-end foi desenvolvido com <b>Node.js</b> (Express) e <b>MongoDB</b>, utilizando <b>Mongoose</b> para modelagem dos dados e <b>JWT</b> para autenticação.</p>
 
 ---
 
